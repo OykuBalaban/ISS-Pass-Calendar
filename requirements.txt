@@ -1,0 +1,9 @@
+flask>=3.0
+skyfield>=1.49
+skyfield-data>=6.0
+numpy
+tzdata
+geonamescache>=2.0
+certifi
+pytest>=8.0
+pyorbital>=1.8

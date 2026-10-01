@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Offline - ISS Pass Calendar{% endblock %}
+{% block content %}
+<section class="box narrow offline">
+  <h1>Offline</h1>
+  {% if status.state == 'none' %}
+    <p class="status bad">Not ready yet</p>
+    <p>Connect to the internet once. The app downloads the data by itself.</p>
+  {% elif status.state == 'fresh' %}
+    <p class="status good">Ready to use offline</p>
+    <p>Accurate until <strong>{{ status.goodUntil.strftime('%d %B') }}</strong>.</p>
+  {% elif status.state == 'old' %}
+    <p class="status warn">Data is getting old</p>
+    <p>Times may be a few seconds off. Connect to the internet to refresh.</p>
+  {% else %}
+    <p class="status bad">Data is too old</p>
+    <p>Connect to the internet to refresh.</p>
+  {% endif %}
+
+  {% if status.savedAt %}
+    <p class="muted">Last update: {{ status.savedAt.strftime('%d.%m.%Y %H:%M') }} UTC</p>
+  {% endif %}
+  <p class="muted">While the app is open, it updates itself every 12 hours when there is internet. You don't need to do anything.</p>
+
+  <form method="post" action="{{ url_for('isspass.offline_update') }}">
+    <button>Update now</button>
+  </form>
+
+  <details>
+    <summary>Load data from a file</summary>
+    <form method="post" action="{{ url_for('isspass.offline_file') }}" enctype="multipart/form-data">
+      <p>For computers that never have internet. Use a TLE file for the ISS (catalog number 25544).</p>
+      <input type="file" name="file" accept=".txt,.tle,text/plain">
+      <p>or paste the lines:</p>
+      <textarea name="tle" rows="3" spellcheck="false"></textarea>
+      <button>Load</button>
+    </form>
+  </details>
+</section>
+{% endblock %}

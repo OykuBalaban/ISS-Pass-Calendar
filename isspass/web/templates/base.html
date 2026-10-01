@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}ISS Pass Calendar{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="bar">
+    <a class="brand" href="{{ url_for('isspass.index', search=1) }}">
+      <svg class="brand-icon" viewBox="-16 -8 32 16" aria-hidden="true">{% include "iss_icon.svg" %}</svg>
+      ISS Pass Calendar
+    </a>
+    <nav>
+      <a id="nav-search" href="{{ url_for('isspass.index', search=1) }}" {% if request.endpoint == 'isspass.index' and request.args.get('search') %}class="active"{% endif %}>Search</a>
+      <a id="nav-passes" href="{{ url_for('isspass.index') }}" {% if request.endpoint == 'isspass.index' and not request.args.get('search') %}class="active"{% endif %}>Passes</a>
+      <a href="{{ url_for('isspass.favorites_page') }}" {% if request.endpoint == 'isspass.favorites_page' %}class="active"{% endif %}>Favorites</a>
+      <a href="{{ url_for('isspass.offline_page') }}" {% if request.endpoint == 'isspass.offline_page' %}class="active"{% endif %}>Offline</a>
+    </nav>
+  </header>
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}
+        <p class="notice {{ cat }}">{{ msg }}</p>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

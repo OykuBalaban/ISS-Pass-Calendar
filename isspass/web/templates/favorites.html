@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Favorites - ISS Pass Calendar{% endblock %}
+{% block content %}
+<div class="list-head">
+  <h1>Favorites</h1>
+  {% if not (current and current.is_favorite) %}
+  <form method="post" action="{{ url_for('isspass.favorites_add_current') }}">
+    <button>+ Add {{ current.name if current else 'location' }}</button>
+  </form>
+  {% endif %}
+</div>
+{% if locations %}
+<table class="passes">
+  <thead><tr><th>Name</th><th>Latitude</th><th>Longitude</th><th></th></tr></thead>
+  <tbody>
+    {% for l in locations %}
+    <tr class="{{ 'selected' if l.is_default else '' }}">
+      <td>{{ l.name }}{% if l.is_default %} <small>(current)</small>{% endif %}</td>
+      <td>{{ '%.2f'|format(l.latitude) }}</td>
+      <td>{{ '%.2f'|format(l.longitude) }}</td>
+      <td class="actions">
+        <form method="post" action="{{ url_for('isspass.favorites_select', loc_id=l.id) }}"><button class="link">Show passes</button></form>
+        <form method="post" action="{{ url_for('isspass.favorites_remove', loc_id=l.id) }}"><button class="link danger">Remove</button></form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>No favorites yet. <a href="{{ url_for('isspass.index', search=1) }}">Search a city</a> and add it.</p>
+{% endif %}
+{% endblock %}

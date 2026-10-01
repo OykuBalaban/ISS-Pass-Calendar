@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+<p class="notice ok" id="toast" hidden></p>
+
+<div class="locbar" id="locbar" hidden>
+  <label for="loc-select">Location:</label>
+  <select id="loc-select"></select>
+  <button type="button" class="secondary small-btn" id="fav-btn">☆ Add to favorites</button>
+  <span class="fav-mark" id="fav-mark">★ In favorites</span>
+  <button type="button" class="small-btn update-btn" id="update-btn">Update</button>
+</div>
+<p class="weather-line" id="weather-line" hidden></p>
+
+<section id="picker" class="box narrow" hidden>
+  <h1>Where are you now?</h1>
+  <div class="search">
+    <input id="search" type="text" autocomplete="off" placeholder="Search city" role="combobox" aria-expanded="false" aria-controls="suggest">
+    <ul class="suggest" id="suggest" role="listbox" hidden></ul>
+  </div>
+  <div class="picker-buttons">
+    <button type="button" class="secondary" id="coords-toggle">Enter coordinates</button>
+  </div>
+  <p class="geo-msg" id="geo-msg"></p>
+  <form class="coords" id="coords" hidden>
+    <label>Name (optional)<input name="name" maxlength="60" placeholder="My village"></label>
+    <label>Latitude<input name="latitude" required inputmode="decimal" placeholder="40.86"></label>
+    <label>Longitude<input name="longitude" required inputmode="decimal" placeholder="26.63"></label>
+    <button>Add</button>
+  </form>
+</section>
+
+<p id="loading" hidden>Loading...</p>
+
+<section id="problem" class="box narrow" hidden>
+  <h2 id="problem-title"></h2>
+  <p id="problem-text"></p>
+  <button id="retry">Try again</button>
+  <a href="{{ url_for('isspass.offline_page') }}">Offline options</a>
+</section>
+
+<section id="app" hidden>
+  <div class="summary box">
+    <div>
+      <h2 id="hero-label"></h2>
+      <p class="hero-time"><span id="hero-time"></span> <span id="hero-countdown" class="countdown"></span></p>
+      <p class="chance-line" id="hero-chance"></p>
+      <p class="sky-line" id="hero-sky"></p>
+      <p class="hint" id="hero-hint"></p>
+      <table class="details" id="details-table">
+        <thead><tr><th></th><th>Time</th><th>Direction</th><th>Height</th></tr></thead>
+        <tbody id="details"></tbody>
+      </table>
+    </div>
+    <svg id="sky" viewBox="-130 -130 260 260" role="img" aria-label="Sky chart of the pass"></svg>
+  </div>
+
+  <div class="list-head">
+    <h2 id="list-title">Visible passes</h2>
+    <label><input type="checkbox" id="show-all"> Show all passes</label>
+  </div>
+  <table class="passes">
+    <thead>
+      <tr><th>Date</th><th>Time</th><th>Duration</th><th>Direction</th><th>Max height</th><th>Sky</th><th>Chance</th></tr>
+    </thead>
+    <tbody id="passes"></tbody>
+  </table>
+
+  <p class="data-line" id="data-line">
+    <span id="data-text"></span>
+    <a href="{{ url_for('isspass.offline_page') }}">Details</a>
+  </p>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+{% endblock %}
